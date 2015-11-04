@@ -1,0 +1,81 @@
+<div class="container">
+	<h1>useragent 信息采集</h1>
+	<p>说明：此页面用于收集不同手机在不同操作系统版本下不同的浏览器以及芒果医生webview中的useragent信息，目的在于利用此信息来做浏览器渲染引擎的进一步调试。</p>
+	<h3>步骤</h3>
+	<p>第一步：请用手机自带浏览器打开此页面，并填写好下面的信息点击提交按钮提交</p>
+	<p>第二步：请用手机安装好的芒果医生切换到测试环境中，点击新闻流中的“ua信息采集”页面进入填写信息</p>
+	<p>第三步：请用微信打开此页面填写信息</p>
+	<div class="form-horizontal">
+		<div class="form-group">
+		    <label for="name" class="col-sm-2 control-label">姓名</label>
+		    <div class="col-sm-10">
+		      <input type="text" name="name" class="form-control J_Field" id="name" placeholder="姓名">
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label for="device" class="col-sm-2 control-label">手机型号</label>
+		    <div class="col-sm-10">
+		      <input type="text" name="device" class="form-control J_Field" id="device" placeholder="手机型号">
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label for="system" class="col-sm-2 control-label">操作系统版本号</label>
+		    <div class="col-sm-10">
+		      <input type="text" name="system" class="form-control J_Field" id="system" placeholder="操作系统版本号，例如 Android4.0.0">
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label for="browser" class="col-sm-2 control-label">浏览器类型</label>
+		    <div class="col-sm-10">
+			    <select class="form-control J_Field" name="browser" id="browser">
+				  <option value="自带浏览器" selected>自带浏览器</option>
+				  <option value="芒果医生">芒果医生</option>
+				  <option value="微信">微信</option>
+				  <option value="其他">其他</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="remark" class="col-sm-2 control-label">备注</label>
+			<div class="col-sm-10">
+				<textarea class="form-control J_Field" name="remark" rows="3"></textarea>
+			</div>
+		</div>
+	</div>
+	<footer style="text-align:center;margin:50px 0;">
+		<div class="btn btn-block btn-primary" id="J_Submit">提交</div>
+		<a href="#" class="btn btn-block btn-primary" id="J_Submit" style="margin-top:20px;">查看目前已采集到的信息</a>
+	</footer>
+</div>
+<script>
+	$('#J_Submit').click(function(){
+		var formValid = true;
+		var formData = {};
+		$('.J_Field').each(function(index){
+			var this$ = $(this);
+			if(this$.val() === '' && this$.attr('name') != 'remark'){
+				formValid = false;
+				return;
+			}else{
+				formData[this$.attr('name')] = this$.val();
+			}
+		});
+
+		if(!formValid){
+			alert('请填写完整信息，谢谢...');
+		}else{
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				data: formData,
+				url: '/ua-collector/records',
+				success: function(res){
+					console.log(res);
+				},
+				error: function(err){
+					console.log(err);
+				}
+			});
+		}
+	});
+</script>
