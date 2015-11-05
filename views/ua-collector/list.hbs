@@ -1,0 +1,29 @@
+<div class="container">
+	<h3>目前已采集到的useragent信息</h3>
+	<table class="table table-bordered table-striped" style="margin-top:50px;">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>姓名</th>
+				<th>手机型号</th>
+				<th>操作系统</th>
+				<th>浏览器类型</th>
+				<th>UA</th>
+				<th>备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each rows}}
+				<tr>
+					<td>{{@index}}</td>
+					<td>{{name}}</td>
+					<td>{{device}}</td>
+					<td>{{system}}</td>
+					<td>{{browser}}</td>
+					<td>{{ua}}</td>
+					<td>{{remark}}</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>

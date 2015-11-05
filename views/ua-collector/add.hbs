@@ -44,7 +44,7 @@
 	</div>
 	<footer style="text-align:center;margin:50px 0;">
 		<div class="btn btn-block btn-primary" id="J_Submit">提交</div>
-		<a href="#" class="btn btn-block btn-primary" id="J_Submit" style="margin-top:20px;">查看目前已采集到的信息</a>
+		<a href="/ua-collector/list" class="btn btn-block btn-primary" id="J_Submit" style="margin-top:20px;">查看目前已采集到的信息</a>
 	</footer>
 </div>
 <script>
@@ -64,13 +64,18 @@
 		if(!formValid){
 			alert('请填写完整信息，谢谢...');
 		}else{
+			formData.ua = navigator.userAgent;
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
 				data: formData,
 				url: '/ua-collector/records',
 				success: function(res){
-					console.log(res);
+					if(res.success){
+						alert('采集成功，非常感谢！')
+					}else{
+						alert(res.msg);
+					}
 				},
 				error: function(err){
 					console.log(err);
