@@ -1,0 +1,21 @@
+<div class="container">
+	<h3>目前已匹配好的信息</h3>
+	<table class="table table-bordered table-striped" style="margin-top:50px;">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>姓名</th>
+				<th>有缘人</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each rows}}
+				<tr>
+					<td>{{@index}}</td>
+					<td>{{name}}</td>
+					<td>{{lover}}</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>

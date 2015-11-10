@@ -5,7 +5,8 @@ var dbPool = mysql.createPool({
 	host: '127.0.0.1',
 	user: 'root',
 	password: 'test',
-	database: 'ua-collector'
+	database: 'ua-collector',
+	multipleStatements: true
 });
 
 module.exports = dbPool;

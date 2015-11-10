@@ -1,0 +1,111 @@
+<style>
+	html,body{
+		height: 100%;
+	}
+	body{
+		background-image: url(/images/bg.jpg);
+		background-size: 100% 100%;
+	}
+	h3,p{
+		color: #fff;
+	}
+</style>
+<div class="container">
+	<h3>众里寻他千百度...</h3>
+	<p>寻找有缘人...你，在哪里?</p>
+	<div class="form">
+		<div class="form-group">
+          <input type="text" class="form-control J_Name col-md-4 col-sm-12" name="name" id="J_Name" placeholder="你的姓名">
+        </div>
+	</div>
+	<div class="btn btn-primary" id="J_Match">开始匹配</div>
+	<a href="/ua-collector/love/results" class="btn btn-primary">查看匹配结果</a>
+</div>
+
+<script>
+	function findLover(loversData, name, sex){
+		if(loversData.length == 0){
+			alert('I\'m sorry, 好白菜都给猪拱了...');
+			return ;
+		}
+		var DifferentSexGroup = [];
+		for(var i = 0; i < loversData.length; i++){
+			if(loversData[i].sex != sex){
+				DifferentSexGroup.push(loversData[i]);
+			}
+		}
+		if(DifferentSexGroup.length == 0){
+			DifferentSexGroup = loversData;
+		}
+		var randomIndex = Math.round(Math.random()*(DifferentSexGroup.length-1));
+
+		$.ajax({
+			url: '/ua-collector/setLoverMatch',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				name: name,
+				loverName: DifferentSexGroup[randomIndex].name
+			},
+			success: function(res){
+				alert('好感动，终于找到你了，有缘人:' + DifferentSexGroup[randomIndex].name);
+			},
+			error: function(err){
+				debugger;
+			}
+		})
+	}
+
+	$('#J_Match').click(function(){
+		var name = $('#J_Name').val();
+		if(name == ''){
+			alert('请填入姓名');
+			return ;
+		}
+		$.ajax({
+			type: 'post',
+			dataType: 'json',
+			data: {
+				name: name
+			},
+			url: '/ua-collector/getLoversData',
+			success: function(res){
+				if(res.success){
+					var loversData = res.data;
+					var validLoversData = [];
+					var curSex = 'female';
+					var exists = false;
+
+					var alreadyMatch = false;
+					for(var i = 0; i < loversData.length; i++){
+						var curItem = loversData[i];
+						if( curItem.name == name && curItem.lover){
+							alreadyMatch = true;
+							exists = true;
+							alert('亲你已经被人“包养”啦，不要贪心哦...');
+							return;
+						}else if( !curItem.lover && curItem.name != name){
+							validLoversData.push(curItem);
+						}else if(curItem.name == name){
+							curSex = curItem.sex;
+							exists = true;
+						}
+					}
+
+					if(!exists){
+						alert('你尚未报名，请先报名哦...');
+						return;
+					}
+					if(!alreadyMatch){
+						findLover(validLoversData, name, curSex);
+					}
+				}else{
+					alert(res.msg);
+				}
+			},
+			error: function(err){
+				console.log(err);
+			}
+		});
+	});
+</script>
